@@ -5,14 +5,15 @@ import com.felnstaren.engine.Renderer;
 public class ParticleGroup {
 
     private Particle[] particles;
-    public int lifetime = 20;
-    public int lifetimeVary = 10;
-    public float constantForceX, constantForceY;
     public int 
+        lifetime = 200,
+        lifetimeVary = 10,
+        randomForceX = 200, randomForceY = 100,
+        constantForceX = 0, constantForceY = 20, 
         x, y, 
         width, height, 
-        direction = 0, spread = 360,
-        speed = 100, speedVary = 0;
+        direction = 90, spread = 90,
+        speed = 20, speedVary = 0;
 
     private static int[]
         sinTable = new int[360],
@@ -35,7 +36,8 @@ public class ParticleGroup {
 
         this.particles = new Particle[numParticles];
         for(int i = 0; i < particles.length; i++) {
-            particles[i] = new Particle();
+            particles[i] = new Particle(this);
+            particles[i].lifetime = lifetime;
             newParticle(particles[i]);
             particles[i].age = (int) (lifetime * Math.random());
         }
@@ -43,15 +45,16 @@ public class ParticleGroup {
 
     private int a,s;
     public void newParticle(Particle particle) {
-        particle.x = (int) (x + width * Math.random());
-        particle.y = (int) (y + height * Math.random());
+        particle.x = x;
+        particle.y = y;
+        if(width > 0) particle.x += (int) (width * Math.random());
+        if(height > 0) particle.y += (int) (height * Math.random());
 
         a = (direction + 360 - spread/2 + (int)(Math.random() * spread)) % 360;
         s = speed + (int) (speedVary * Math.random());
         particle.vx = ((cosTable[a] * s)) >> 8;
         particle.vy = -((sinTable[a] * s)) >> 8;
         particle.age = (int) (lifetimeVary * Math.random());
-        particle.lifetime = lifetime;
     }
 
     public void update(float delta_time) {
