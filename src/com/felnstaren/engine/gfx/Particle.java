@@ -1,6 +1,7 @@
 package com.felnstaren.engine.gfx;
 
 import com.felnstaren.engine.Renderer;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Particle {
 
@@ -21,8 +22,8 @@ public class Particle {
     }
 
     public void update(float delta_time) {
-        if(group.randomForceX != 0) vx += group.randomForceX * (Math.random() - 0.5);
-        if(group.randomForceY != 0) vy += group.randomForceY * (Math.random() - 0.5);
+        if(group.randomForceX != 0) vx += ThreadLocalRandom.current().nextInt(group.randomForceX) - (group.randomForceX >> 1);
+        if(group.randomForceY != 0) vy += ThreadLocalRandom.current().nextInt(group.randomForceY) - (group.randomForceY >> 1);
         if(group.constantForceX != 0) vx += group.constantForceX;
         if(group.constantForceY != 0) vy += group.constantForceY;
         x += vx;

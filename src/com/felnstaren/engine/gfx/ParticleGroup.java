@@ -1,6 +1,7 @@
 package com.felnstaren.engine.gfx;
 
 import com.felnstaren.engine.Renderer;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ParticleGroup {
 
@@ -8,12 +9,12 @@ public class ParticleGroup {
     public int 
         lifetime = 200,
         lifetimeVary = 10,
-        randomForceX = 0, randomForceY = 0,
-        constantForceX = 0, constantForceY = 0, 
+        randomForceX = 10, randomForceY = 10,
+        constantForceX = 5, constantForceY = 5, 
         x, y, 
         width, height, 
         direction = 90, spread = 180,
-        speed = 100, speedVary = 0;
+        speed = 100, speedVary = 1;
 
     private static final int[]
         sinTable = new int[360],
@@ -38,7 +39,7 @@ public class ParticleGroup {
         for(int i = 0; i < particles.length; i++) {
             particles[i] = new Particle(this);
             newParticle(particles[i]);
-            particles[i].age = (int) (lifetime * Math.random());
+            particles[i].age = ThreadLocalRandom.current().nextInt(lifetime);
         }
     }  
 
@@ -46,14 +47,14 @@ public class ParticleGroup {
     public void newParticle(Particle particle) {
         particle.x = x << 8;
         particle.y = y << 8;
-        if(width > 0) particle.x += (int) ((width << 8) * Math.random());
-        if(height > 0) particle.y += (int) ((height << 8) * Math.random());
+        if(width > 0) particle.x += ThreadLocalRandom.current().nextInt((width << 8));
+        if(height > 0) particle.y += ThreadLocalRandom.current().nextInt((height << 8));
 
-        a = (direction + 360 - spread/2 + (int)(Math.random() * spread)) % 360;
-        s = speed + (int) (speedVary * Math.random());
+        a = (direction + 360 - spread/2 + ThreadLocalRandom.current().nextInt(spread)) % 360;
+        s = speed + ThreadLocalRandom.current().nextInt(speedVary);
         particle.vx = ((cosTable[a] * s) >> 8);
         particle.vy = -((sinTable[a] * s) >> 8);
-        particle.age = (int) (lifetimeVary * Math.random());
+        particle.age = ThreadLocalRandom.current().nextInt(lifetimeVary);
     }
 
     public void update(float delta_time) {
