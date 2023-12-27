@@ -21,7 +21,7 @@ public class Entity {
         this.width = width;
         this.height = height;
         this.invMass = 1.0f / mass;
-        particles = new ParticleGroup(1000, (int) x, (int) y, width, height);
+        particles = new ParticleGroup(1000000, (int) x, (int) y, width, height);
         ParticleManager.INSTANCE.addGroup(particles);
     }
 

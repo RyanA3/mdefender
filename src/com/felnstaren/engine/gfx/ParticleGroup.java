@@ -8,14 +8,14 @@ public class ParticleGroup {
     public int 
         lifetime = 200,
         lifetimeVary = 10,
-        randomForceX = 200, randomForceY = 100,
-        constantForceX = 0, constantForceY = 20, 
+        randomForceX = 0, randomForceY = 0,
+        constantForceX = 0, constantForceY = 0, 
         x, y, 
         width, height, 
-        direction = 90, spread = 90,
-        speed = 20, speedVary = 0;
+        direction = 90, spread = 180,
+        speed = 100, speedVary = 0;
 
-    private static int[]
+    private static final int[]
         sinTable = new int[360],
         cosTable = new int[360];
     
@@ -37,7 +37,6 @@ public class ParticleGroup {
         this.particles = new Particle[numParticles];
         for(int i = 0; i < particles.length; i++) {
             particles[i] = new Particle(this);
-            particles[i].lifetime = lifetime;
             newParticle(particles[i]);
             particles[i].age = (int) (lifetime * Math.random());
         }
@@ -45,15 +44,15 @@ public class ParticleGroup {
 
     private int a,s;
     public void newParticle(Particle particle) {
-        particle.x = x;
-        particle.y = y;
-        if(width > 0) particle.x += (int) (width * Math.random());
-        if(height > 0) particle.y += (int) (height * Math.random());
+        particle.x = x << 8;
+        particle.y = y << 8;
+        if(width > 0) particle.x += (int) ((width << 8) * Math.random());
+        if(height > 0) particle.y += (int) ((height << 8) * Math.random());
 
         a = (direction + 360 - spread/2 + (int)(Math.random() * spread)) % 360;
         s = speed + (int) (speedVary * Math.random());
-        particle.vx = ((cosTable[a] * s)) >> 8;
-        particle.vy = -((sinTable[a] * s)) >> 8;
+        particle.vx = ((cosTable[a] * s) >> 8);
+        particle.vy = -((sinTable[a] * s) >> 8);
         particle.age = (int) (lifetimeVary * Math.random());
     }
 
