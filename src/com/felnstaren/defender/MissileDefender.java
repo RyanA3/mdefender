@@ -9,6 +9,9 @@ import com.felnstaren.engine.Renderer;
 import com.felnstaren.engine.event.EventHandler;
 import com.felnstaren.engine.gfx.ParticleManager;
 import com.felnstaren.engine.ui.button.ButtonHandler;
+
+import java.awt.event.KeyEvent;
+
 import com.felnstaren.defender.entity.Entity;
 
 public class MissileDefender extends AbstractApp {
@@ -41,6 +44,10 @@ public class MissileDefender extends AbstractApp {
 		cursor.update(delta_time);
 		for(Entity e : entities) e.update(delta_time);
 		ParticleManager.INSTANCE.update(delta_time);
+
+		if(ac.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+			ac.stop();
+		}
 	}
 
 	public void render(AppContainer ac, Renderer renderer) {

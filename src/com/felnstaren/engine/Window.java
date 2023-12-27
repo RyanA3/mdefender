@@ -34,6 +34,9 @@ public class Window {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setVisible(true);
+
+		//frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//frame.setUndecorated(true);
 		
 		canvas.createBufferStrategy(2);
 		bs = canvas.getBufferStrategy();
