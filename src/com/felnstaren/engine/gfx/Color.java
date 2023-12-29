@@ -41,21 +41,31 @@ public class Color {
         return out;
     }
 
+    private static int r1,r2,g1,g2,b1,b2,a1,a2,R,G,B,A;
     public static int lerp(int color1, int color2, float by) {
-        int r1 = (color1 >> 16) & 0xff;
-        int r2 = (color2 >> 16) & 0xff;
-        int g1 = (color1 >> 8) & 0xff;
-        int g2 = (color2 >> 8) & 0xff;
-        int b1 = color1 & 0xff;
-        int b2 = color2 & 0xff;
-        int a1 = (color1 >> 24) & 0xff;
-        int a2 = (color2 >> 24) & 0xff;
+        r1 = (color1 >> 16) & 0xff;
+        r2 = (color2 >> 16) & 0xff;
+        g1 = (color1 >> 8) & 0xff;
+        g2 = (color2 >> 8) & 0xff;
+        b1 = color1 & 0xff;
+        b2 = color2 & 0xff;
+        a1 = (color1 >> 24) & 0xff;
+        a2 = (color2 >> 24) & 0xff;
 
-        int r = (int) (r1 * (1 - by) + r2 * by);
-        int g = (int) (g1 * (1 - by) + g2 * by);
-        int b = (int) (b1 * (1 - by) + b2 * by);
-        int a = (int) (a1 * (1 - by) + a2 * by);
-        return (a << 24 | r << 16 | g << 8 | b);
+        R = (int) (r1 * (1 - by) + r2 * by);
+        G = (int) (g1 * (1 - by) + g2 * by);
+        B = (int) (b1 * (1 - by) + b2 * by);
+        A = (int) (a1 * (1 - by) + a2 * by);
+        return (A << 24 | R << 16 | G << 8 | B);
+    }
+
+    public static int lerp(float by, int... colors) {
+        int i = (int) ((colors.length-1) * by);
+        int color1 = colors[i];
+        int color2;
+        if(i+1 >= colors.length) color2 = colors[i];
+        else color2 = colors[i+1];
+        return lerp(color1, color2, ((by * colors.length) - i) / colors.length);
     }
     
 }

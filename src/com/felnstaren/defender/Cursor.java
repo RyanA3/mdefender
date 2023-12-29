@@ -1,7 +1,9 @@
 package com.felnstaren.defender;
 
+import com.felnstaren.defender.entity.Missile;
 import com.felnstaren.engine.Renderer;
 import com.felnstaren.engine.gfx.Image;
+import java.awt.event.MouseEvent;
 
 public class Cursor {
 
@@ -14,8 +16,12 @@ public class Cursor {
     }
 
     public void update(float delta_time) {
-        this.x = MissileDefender.app.getInput().getMouseX();
-        this.y = MissileDefender.app.getInput().getMouseY();
+        this.x = MissileDefender.APP.getInput().getMouseX();
+        this.y = MissileDefender.APP.getInput().getMouseY();
+
+        if(MissileDefender.APP.getInput().isButtonDown(MouseEvent.BUTTON1)) {
+            MissileDefender.GAME.spawn(new Missile(x, y, 100, MissileDefender.APP.getHeight(), 1));
+        }
     }
 
     public void render(Renderer renderer) {

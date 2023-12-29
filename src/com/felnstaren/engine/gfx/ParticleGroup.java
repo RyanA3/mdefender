@@ -10,11 +10,13 @@ public class ParticleGroup {
         lifetime = 200,
         lifetimeVary = 10,
         randomForceX = 10, randomForceY = 10,
-        constantForceX = 5, constantForceY = 5, 
+        constantForceX = 0, constantForceY = 30, 
         x, y, 
         width, height, 
         direction = 90, spread = 180,
         speed = 100, speedVary = 1;
+    
+    public ParticleType type = ParticleType.FIRE;
 
     private static final int[]
         sinTable = new int[360],
@@ -45,15 +47,15 @@ public class ParticleGroup {
 
     private int a,s;
     public void newParticle(Particle particle) {
-        particle.x = x << 8;
-        particle.y = y << 8;
+        particle.x = (x << 8);
+        particle.y = (y << 8);
         if(width > 0) particle.x += ThreadLocalRandom.current().nextInt((width << 8));
         if(height > 0) particle.y += ThreadLocalRandom.current().nextInt((height << 8));
 
         a = (direction + 360 - spread/2 + ThreadLocalRandom.current().nextInt(spread)) % 360;
         s = speed + ThreadLocalRandom.current().nextInt(speedVary);
         particle.vx = ((cosTable[a] * s) >> 8);
-        particle.vy = -((sinTable[a] * s) >> 8);
+        particle.vy =  -((sinTable[a] * s) >> 8);
         particle.age = ThreadLocalRandom.current().nextInt(lifetimeVary);
     }
 

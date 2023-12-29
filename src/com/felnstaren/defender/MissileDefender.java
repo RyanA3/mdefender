@@ -16,7 +16,8 @@ import com.felnstaren.defender.entity.Entity;
 
 public class MissileDefender extends AbstractApp {
 	
-	public static AppContainer app;
+	public static AppContainer APP;
+	public static MissileDefender GAME;
 
 	private HUD hud;
 	private EventHandler ehandler;
@@ -32,8 +33,7 @@ public class MissileDefender extends AbstractApp {
 		this.ehandler = new EventHandler();
 		this.bhandler = new ButtonHandler(ehandler);	
 		
-		Entity e = new Entity(app.getWidth() / 2, app.getHeight() / 2, 20, 20, 1.0f);
-		e.applyConstantForce(0, 9.8f);
+		Entity e = new Entity(100, APP.getHeight() - 20, 20, 20, 1.0f);
 		entities.add(e);
 	}
 
@@ -58,12 +58,17 @@ public class MissileDefender extends AbstractApp {
 		for(Entity e : entities) e.render(renderer);
 		ParticleManager.INSTANCE.render(renderer);
 	} 
+
+	public void spawn(Entity entity) {
+		entities.add(entity);
+	}
 	
 	
 	
 	public static void main(String[] args) {
-		app = new AppContainer(new MissileDefender());
-		app.start();
+		GAME = new MissileDefender();
+		APP = new AppContainer(GAME);
+		APP.start();
 	}
 
 }
