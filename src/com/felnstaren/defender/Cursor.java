@@ -20,7 +20,7 @@ public class Cursor {
         this.y = MissileDefender.APP.getInput().getMouseY();
 
         if(MissileDefender.APP.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-            MissileDefender.GAME.spawn(new Missile(x, y, 100, MissileDefender.APP.getHeight(), 1));
+            MissileDefender.GAME.spawn(new Missile(x, y, -100, 100, MissileDefender.APP.getHeight(), 1));
         }
     }
 

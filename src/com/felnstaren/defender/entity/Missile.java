@@ -9,9 +9,10 @@ public class Missile extends Entity {
     public static final float GRAVITY = 10f;
     private int targetY = 0;
 
-    public Missile(int x, int y, int targetX, int targetY, float mass) {
+    public Missile(int x, int y, int vy, int targetX, int targetY, float mass) {
         super(x, y, 2, 2, mass);
         this.ay = GRAVITY;
+        this.vy = vy;
         this.targetY = targetY;
         int dx = targetX - x;
         int dy = targetY - y;
@@ -22,7 +23,7 @@ public class Missile extends Entity {
         //0 = 0.5at^2 + v0t - dy
         //solve by quadratic equation (-b +/- sqrt(b^2 - 4ac)) / 2a
         //t = (-v0 + sqrt(v0^2 - 4*0.5*GRAVITY*-dy)) / 2(0.5*GRAVITY)
-        float timeToImpact = (float) ((vy + Math.sqrt((vy*vy) + 4*0.5*ay*dy)) / (2*0.5*ay));
+        float timeToImpact = (float) ((-vy + Math.sqrt((vy*vy) + 4*0.5*ay*dy)) / (2*0.5*ay));
 
         //Solve for vx to reach target destination
         //0 = 0.5*0*t^2 + v0t - dx

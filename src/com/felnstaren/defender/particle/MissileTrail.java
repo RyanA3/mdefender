@@ -13,6 +13,7 @@ public class MissileTrail extends ParticleGroup {
         this.randomForceY = 0;
         this.speed = 100;
         this.spread = 10;
+        this.lifetime = 200;
         this.type = ParticleType.MISSILE_TRAIL;
     }
 
@@ -23,7 +24,8 @@ public class MissileTrail extends ParticleGroup {
         this.randomForceX = 50;
         this.randomForceY = 10;
         this.speed = 100;
-        this.spread = 20;
+        this.spread = 10;
+        this.lifetime = 200;
         this.type = ParticleType.MISSILE_TRAIL;
     }
 
