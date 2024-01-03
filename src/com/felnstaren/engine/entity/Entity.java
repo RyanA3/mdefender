@@ -1,4 +1,4 @@
-package com.felnstaren.defender.entity;
+package com.felnstaren.engine.entity;
 
 import com.felnstaren.engine.Renderer;
 import com.felnstaren.engine.gfx.ParticleGroup;
@@ -53,6 +53,10 @@ public class Entity {
     public void applyInstantaneousForce(float ifx, float ify) {
         iax += ifx * invMass;
         iay += ify * invMass;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
     
 }

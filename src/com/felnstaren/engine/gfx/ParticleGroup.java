@@ -15,7 +15,15 @@ public class ParticleGroup {
         width, height, 
         direction = 90, spread = 180,
         speed = 100, speedVary = 1,
+        lastSpawnedParticle = 0,
         numAlive = 0;
+
+    public float 
+        spawnRate = 1,
+        spawnTimer = 0;
+    
+    protected boolean 
+        respawn = true;
     
     public ParticleType type = ParticleType.FIRE;
 
@@ -31,7 +39,7 @@ public class ParticleGroup {
         }
     }
 
-    public ParticleGroup(int numParticles, int x, int y, int width, int height, int direction, int spread, int speed, int numAlive) {
+    public ParticleGroup(int numParticles, int x, int y, int width, int height, int direction, int spread, int speed, int lastSpawnedParticle) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -39,7 +47,10 @@ public class ParticleGroup {
         this.direction = direction;
         this.spread = spread;
         this.speed = speed;
-        this.numAlive = numAlive;
+        if(lastSpawnedParticle < 0) lastSpawnedParticle = numParticles + lastSpawnedParticle;
+        this.lastSpawnedParticle = lastSpawnedParticle;
+        this.numAlive = numParticles;
+        this.spawnRate = numParticles / 10;
 
         this.particles = new Particle[numParticles];
         for(int i = 0; i < particles.length; i++) {
@@ -47,13 +58,13 @@ public class ParticleGroup {
             particles[i].age = ThreadLocalRandom.current().nextInt(lifetime);
         }
 
-        for(int i = 0; i < numAlive; i++) {
+        for(int i = 0; i < lastSpawnedParticle; i++) {
             newParticle(particles[i]);
         }
     }
 
-    public ParticleGroup(int numParticles, int x, int y, int direction, int spread, int speed, int numAlive) {
-        this(numParticles, x, y, 0, 0, direction, spread, speed, numAlive);
+    public ParticleGroup(int numParticles, int x, int y, int direction, int spread, int speed, int lastSpawnedParticle) {
+        this(numParticles, x, y, 0, 0, direction, spread, speed, lastSpawnedParticle);
     }
 
     public ParticleGroup(int numParticles, int x, int y, int direction, int spread, int speed) {
@@ -90,21 +101,43 @@ public class ParticleGroup {
     }
 
     public void update(float delta_time) {
-        if(numAlive < particles.length - 1) {
-            newParticle(particles[numAlive]);
-            numAlive++;
+        if(respawn) {
+            spawnTimer ++;
+            int numToSpawn = (int) (spawnTimer * spawnRate);
+            
+            if(numToSpawn > 0) {
+                spawnTimer = 0;
+                for(int i = 0; i < numToSpawn && lastSpawnedParticle < particles.length; i++) {
+                    newParticle(particles[lastSpawnedParticle]);
+                    lastSpawnedParticle++;
+                }
+            }
         }
         
-        for(int i = 0; i < numAlive; i++) {
-            if(particles[i].isDead()) newParticle(particles[i]);
+        numAlive = particles.length;
+        for(int i = 0; i < lastSpawnedParticle; i++) {
+            if(particles[i].isDead()) {
+                if(respawn) newParticle(particles[i]);
+                else {
+                    numAlive--;
+                }
+            }
             particles[i].update(delta_time);
         }
     }
 
     public void render(Renderer renderer) {
-        for(int i = 0; i < numAlive; i++) {
-            particles[i].render(renderer);
+        for(int i = 0; i < lastSpawnedParticle; i++) {
+            if(!particles[i].isDead()) particles[i].render(renderer);
         }
     }
+
+    public void setShouldRespawnParticles(boolean respawn) {
+        this.respawn = respawn;
+    }
     
+    public boolean shouldRemove() {
+        return numAlive == 0;
+    }
+
 }

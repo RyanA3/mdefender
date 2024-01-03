@@ -60,6 +60,7 @@ public class Color {
     }
 
     public static int lerp(float by, int... colors) {
+        if(colors.length == 1) return colors[0];
         int i = (int) ((colors.length-1) * by);
         int color1 = colors[i];
         int color2;
