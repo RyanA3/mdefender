@@ -20,7 +20,10 @@ public class Cursor {
         this.y = MissileDefender.APP.getInput().getMouseY();
 
         if(MissileDefender.APP.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-            MissileDefender.GAME.spawn(new Missile(x, y, -10, 100, MissileDefender.APP.getHeight()-100, 1));
+            int maxHeight = MissileDefender.GAME.sampleTerrainHeight(MissileDefender.APP.getWidth()-1) - 10;
+            int spawnHeight = (int) (Math.random() * maxHeight);
+            int spawnX = MissileDefender.APP.getWidth();
+            MissileDefender.GAME.spawn(new Missile(spawnX, spawnHeight, 0, x, MissileDefender.GAME.sampleTerrainHeight(x), 1));
         }
     }
 

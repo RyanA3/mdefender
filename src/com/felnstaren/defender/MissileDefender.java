@@ -7,6 +7,7 @@ import com.felnstaren.engine.entity.Entity;
 import com.felnstaren.engine.entity.EntityHandler;
 import com.felnstaren.engine.event.EventHandler;
 import com.felnstaren.engine.gfx.ParticleManager;
+import com.felnstaren.engine.terrain.DustTerrain;
 import com.felnstaren.engine.ui.button.ButtonHandler;
 
 import java.awt.event.KeyEvent;
@@ -20,6 +21,7 @@ public class MissileDefender extends AbstractApp {
 	private EventHandler ehandler;
 	private ButtonHandler bhandler;
 	private EntityHandler entityHandler;
+	private DustTerrain terrain;
 
 	private Cursor cursor = new Cursor();
 
@@ -29,6 +31,7 @@ public class MissileDefender extends AbstractApp {
 		this.ehandler = new EventHandler();
 		this.bhandler = new ButtonHandler(ehandler);	
 		this.entityHandler = new EntityHandler();
+		this.terrain = new DustTerrain(ac.getWidth(), ac.getHeight());
 		
 		Entity e = new Entity(100, APP.getHeight() - 20, 20, 20, 1.0f);
 		spawn(e);
@@ -41,6 +44,7 @@ public class MissileDefender extends AbstractApp {
 		cursor.update(delta_time);
 		entityHandler.update(delta_time);
 		ParticleManager.INSTANCE.update(delta_time);
+		terrain.update(delta_time);
 
 		if(ac.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
 			ac.stop();
@@ -53,11 +57,17 @@ public class MissileDefender extends AbstractApp {
 
 		cursor.render(renderer);	
 		entityHandler.render(renderer);
+		
 		ParticleManager.INSTANCE.render(renderer);
+		terrain.render(renderer);
 	} 
 
 	public void spawn(Entity entity) {
 		entityHandler.spawn(entity);
+	}
+
+	public int sampleTerrainHeight(int x) {
+		return terrain.sampleHeight(x);
 	}
 	
 	

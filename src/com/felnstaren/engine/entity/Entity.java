@@ -16,7 +16,7 @@ public class Entity {
         particles = new ParticleGroup(32, (int) x, (int) y, width, height);
         ParticleManager.INSTANCE.addGroup(particles);
     }
-    public Entity(int x, int y, int width, int height, float mass) {
+    public Entity(float x, float y, int width, int height, float mass) {
         this.x = x;
         this.y = y;
         this.width = width;

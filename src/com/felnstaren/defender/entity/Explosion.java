@@ -2,6 +2,7 @@ package com.felnstaren.defender.entity;
 
 import com.felnstaren.defender.particle.Shrapnel;
 import com.felnstaren.engine.entity.Entity;
+import com.felnstaren.engine.gfx.ParticleManager;
 
 public class Explosion extends Entity {
 
@@ -9,7 +10,9 @@ public class Explosion extends Entity {
     private float age = 0;
 
     public Explosion(float x, float y, float intensity) {
-        this.particles = new Shrapnel((int) x, (int) y, 0, 360, intensity);
+        super(x, y, 10, 10, 1);
+        this.particles = new Shrapnel((int) x, (int) y, 90, 180, intensity);
+        ParticleManager.INSTANCE.addGroup(particles);
     }
 
     public void update(float delta_time) {

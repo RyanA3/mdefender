@@ -2,7 +2,6 @@ package com.felnstaren.defender.entity;
 
 import com.felnstaren.defender.MissileDefender;
 import com.felnstaren.defender.particle.MissileTrail;
-import com.felnstaren.engine.AppContainer;
 import com.felnstaren.engine.Renderer;
 import com.felnstaren.engine.entity.Entity;
 import com.felnstaren.engine.gfx.ParticleManager;
@@ -41,6 +40,10 @@ public class Missile extends Entity {
         super.update(delta_time);
 
         particles.direction = (int) (Math.toDegrees(Math.atan(-vy / vx)));
+
+        if(y > targetY - 100) {
+            particles.setShouldRespawnParticles(false);
+        }
         
         if(y > targetY && !dead) {
             //Explode

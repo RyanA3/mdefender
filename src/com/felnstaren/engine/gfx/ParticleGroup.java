@@ -39,7 +39,9 @@ public class ParticleGroup {
         }
     }
 
-    public ParticleGroup(int numParticles, int x, int y, int width, int height, int direction, int spread, int speed, int lastSpawnedParticle) {
+
+
+    public ParticleGroup(int numParticles, int x, int y, int width, int height, int direction, int spread, int speed, int speedVary, int lifetime, int lifetimeVary, int lastSpawnedParticle) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -47,10 +49,13 @@ public class ParticleGroup {
         this.direction = direction;
         this.spread = spread;
         this.speed = speed;
+        this.speedVary = speedVary;
         if(lastSpawnedParticle < 0) lastSpawnedParticle = numParticles + lastSpawnedParticle;
         this.lastSpawnedParticle = lastSpawnedParticle;
         this.numAlive = numParticles;
         this.spawnRate = numParticles / 10;
+        this.lifetime = lifetime;
+        this.lifetimeVary = lifetimeVary;
 
         this.particles = new Particle[numParticles];
         for(int i = 0; i < particles.length; i++) {
@@ -61,6 +66,14 @@ public class ParticleGroup {
         for(int i = 0; i < lastSpawnedParticle; i++) {
             newParticle(particles[i]);
         }
+    }
+
+    public ParticleGroup(int numParticles, int x, int y, int width, int height, int direction, int spread, int speed, int speedVary, int lastSpawnedParticle) {
+        this(numParticles, x, y, width, height, direction, spread, speed, speedVary, 100, 10, lastSpawnedParticle);
+    }
+
+    public ParticleGroup(int numParticles, int x, int y, int width, int height, int direction, int spread, int speed, int lastSpawnedParticle) {
+        this(numParticles, x, y, width, height, direction, spread, speed, 0, lastSpawnedParticle);
     }
 
     public ParticleGroup(int numParticles, int x, int y, int direction, int spread, int speed, int lastSpawnedParticle) {
@@ -94,14 +107,15 @@ public class ParticleGroup {
         if(height > 0) particle.y += ThreadLocalRandom.current().nextInt((height << 8));
 
         a = (direction + 360 - spread/2 + ThreadLocalRandom.current().nextInt(spread)) % 360;
-        s = speed + ThreadLocalRandom.current().nextInt(speedVary);
+        s = speed;
+        if(speedVary > 0) s += ThreadLocalRandom.current().nextInt(speedVary);
         particle.vx = ((cosTable[a] * s) >> 8);
         particle.vy =  -((sinTable[a] * s) >> 8);
         particle.age = ThreadLocalRandom.current().nextInt(lifetimeVary);
     }
 
     public void update(float delta_time) {
-        if(respawn) {
+        if(respawn || lastSpawnedParticle < particles.length) {
             spawnTimer ++;
             int numToSpawn = (int) (spawnTimer * spawnRate);
             
@@ -109,6 +123,7 @@ public class ParticleGroup {
                 spawnTimer = 0;
                 for(int i = 0; i < numToSpawn && lastSpawnedParticle < particles.length; i++) {
                     newParticle(particles[lastSpawnedParticle]);
+                    particles[lastSpawnedParticle].age = ThreadLocalRandom.current().nextInt(lifetime);
                     lastSpawnedParticle++;
                 }
             }
