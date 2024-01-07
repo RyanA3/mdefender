@@ -1,7 +1,5 @@
 package com.felnstaren.engine.terrain;
 
-import com.felnstaren.defender.MissileDefender;
-
 import com.felnstaren.engine.Renderer;
 
 public class DustTerrain {
@@ -16,8 +14,15 @@ public class DustTerrain {
 
         for(int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                if(y + (x / 10) > height - 100) {
+                int k = y;
+                if(k > height - 20) {
+                    terrain[y * width + x] = (byte) TerrainType.STONE.ordinal();
+                }
+                else if(k > height - 29) {
                     terrain[y * width + x] = (byte) TerrainType.DIRT.ordinal();
+                }
+                else if(k > height - 35) {
+                    terrain[y * width + x] = (byte) TerrainType.GRASS.ordinal();
                 }
             }
         }
@@ -37,11 +42,22 @@ public class DustTerrain {
     }
 
     public int sampleHeight(int x) {
-        for(int y = height-1; y > 0; y--) {
-            if(terrain[y * width + x] != (byte) TerrainType.AIR.ordinal()) continue;
-            return y+1;
+        for(int y = 0; y < height; y++) {
+            if(terrain[y * width + x] == (byte) TerrainType.AIR.ordinal()) continue;
+            return y;
         }
         return 0;
     }
+
+    public boolean inBounds(int x, int y) {
+        return x > 0 && y > 0 && x < width && y < height;
+    }
+
+    public void setTerrain(int x, int y, TerrainType element) {
+        if(!inBounds(x,y)) return;
+        terrain[y * width + x] = (byte) element.ordinal();
+    }
+
+
 
 }

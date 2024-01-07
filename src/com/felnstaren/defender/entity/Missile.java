@@ -45,11 +45,11 @@ public class Missile extends Entity {
             particles.setShouldRespawnParticles(false);
         }
         
-        if(y > targetY && !dead) {
+        if(y > MissileDefender.GAME.terrain.sampleHeight((int) x) && !dead) {
             //Explode
             this.dead = true;
             particles.setShouldRespawnParticles(false);
-            MissileDefender.GAME.spawn(new Explosion(x, y, 1));
+            MissileDefender.GAME.entities.spawn(new Explosion(x, y, 1));
         }
     }
 
